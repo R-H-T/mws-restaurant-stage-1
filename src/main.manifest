@@ -1,0 +1,25 @@
+CACHE MANIFEST
+# Restaurant Reviews App Cache Manifest.
+# Cache manifest version 0.0.1
+
+# add resources here (optional)
+# images/touch-icon-iphone.png
+# images/touch-icon-ipad.png
+# images/touch-icon-iphone-retina.png
+# images/touch-icon-ipad-retina.png
+# images/launch.png
+
+NETWORK:
+# All URLs that start with the following lines
+# are whitelisted.
+*
+
+CACHE:
+# Additional items to cache.
+main.js
+css/main.css
+index.html
+restaurant.html
+
+FALLBACK:
+# add fallback content here

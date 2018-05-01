@@ -1,0 +1,71 @@
+// ======================
+//        Layout
+// ======================
+
+//
+//  Grid Layout
+//
+.grid.one-column
+  display: grid
+  +grid-columns(1)
+  justify-content: space-around
+  grid-gap: 20px
+.grid.two-column
+  @extend .grid.one-column
+  +grid-columns(2)
+.grid.three-column
+  @extend .grid.one-column
+  +grid-columns(3)
+.grid.four-column
+  @extend .grid.one-column
+  +grid-columns(4)
+.grid.five-column
+  @extend .grid.one-column
+  +grid-columns(5)
+.grid.six-column
+  @extend .grid.one-column
+  +grid-columns(6)
+
+//
+//  12-Columns
+//
+// =col-width($colNum)
+//   width: (($colNum) / 12) * 100%
+
+// *
+//   box-sizing: border-box
+
+// [class*="col-"]
+//   width: 100%
+//   float: left
+
+// .row::after
+//   content: ''
+//   clear: both
+//   display: table
+
+// =cols()
+//   .col-1
+//     +col-width(1)
+//   .col-2
+//     +col-width(2)
+//   .col-3
+//     +col-width(3)
+//   .col-4
+//     +col-width(4)
+//   .col-5
+//     +col-width(5)
+//   .col-6
+//     +col-width(6)
+//   .col-7
+//     +col-width(7)
+//   .col-8
+//     +col-width(8)
+//   .col-9
+//     +col-width(9)
+//   .col-10
+//     +col-width(10)
+//   .col-11
+//     +col-width(11)
+//   .col-12
+//     +col-width(12)

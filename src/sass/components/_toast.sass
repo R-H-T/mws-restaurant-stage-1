@@ -1,0 +1,112 @@
+// ======================
+//         Toast
+// ======================
+%defaultToastBottom
+    bottom: 0
+    @media only screen and (min-width: 601px)
+      bottom: 16px
+.toast
+  display: flex
+  justify-content: center
+  flex-wrap: wrap
+  width: 100%
+  opacity: 0
+  visibility: hidden
+  min-height: 70px
+  font-family: Roboto, sans-serif
+  font-size: 16px
+  text-align: center
+  vertical-align: middle
+  color: #eee
+  background: #333
+  position: fixed
+  border: 1px solid #555
+  left: 0
+  z-index: 9999
+  box-shadow: 1px 1px 12px rgba(0,0,0,0.2), -1px -1px 12px rgba(0,0,0,0.2)
+  padding: 0
+  margin: 0
+  transition: 0.40s all ease-in
+  animation-fill-mode: forwards
+  @extend %defaultToastBottom
+  @media only screen and (min-width: 601px)
+    max-width: 320px
+    left: 16px
+  @media only screen and (max-width: 601px)
+    border-left: 0
+    border-right: 0
+  &.show
+    animation: fadeIn 0.5s
+    animation-iteration-count: 1
+    visibility: visible
+    @extend %defaultToastBottom
+    opacity: 1
+  &.hide
+    animation: fadeOut 0.5s
+    animation-iteration-count: 1
+    bottom: -320px
+    visibility: hidden
+    opacity: 0
+  p
+    font-family: Roboto, sans-serif
+    font-size: 16px
+    text-shadow: 1px 1px 1px #222
+    color: #eee
+    min-width: 100%
+    padding-top: 16px
+    padding-bottom: 16px
+    margin: 0
+    vertical-align: middle
+    @media only screen and (max-width: 601px)
+      border-left: 0
+      border-right: 0
+  .actions
+    display: flex
+    justify-content: flex-end
+    flex-flow: column
+    min-width: 100%
+    @media only screen and (min-width: 601px)
+      flex-flow: row
+    a,
+    button
+      flex-grow: 1
+      user-select: none
+      cursor: pointer
+      min-width: 48px
+      max-height: 48px
+      font-family: Roboto, sans-serif
+      font-size: 16px
+      text-transform: capitalize
+      text-align: center
+      text-shadow: 1px 1px 1px #222
+      vertical-align: middle
+      color: #ec4
+      background: #333
+      border: 1px solid #444
+      border-right: 0
+      border-bottom: 3px solid #ffcc98
+      padding: 8px 16px 8px 16px
+      &:hover
+        border-bottom-color: #f90
+      &.default
+        color: #e90
+      @media only screen and (max-width: 600px)
+        border-left: 0
+
+@keyframes fadeIn
+  0%
+    bottom: -320px
+    opacity: 0
+  100%
+    opacity: 1
+    @extend %defaultToastBottom
+    animation-play-state: paused
+
+@keyframes fadeOut
+  0%
+    opacity: 1
+    @extend %defaultToastBottom
+  100%
+    bottom: -320px
+    opacity: 0
+    animation-play-state: paused

@@ -1,0 +1,78 @@
+{
+  "name": "mws-restaurant",
+  "version": "1.0.0",
+  "description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --host localhost --port 8080 --mode development --open & node server.js",
+    "watch": "webpack --watch --mode development",
+    "images": "grunt images",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/R-H-T/mws-restaurant-stage-1.git"
+  },
+  "author": "Roberth Hansson-Tornéus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/R-H-T/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/R-H-T/mws-restaurant-stage-1#readme",
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "testMatch": [
+      "**/?(*.)(spec|test).js?(x)"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "copy-webpack-plugin": "^4.5.1",
+    "cors": "^2.8.4",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "express": "^4.16.3",
+    "file-loader": "^1.1.11",
+    "grunt": "^1.0.2",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-mkdir": "^1.0.0",
+    "grunt-responsive-images": "^1.10.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.1.0",
+    "idb": "^2.1.1",
+    "image-webpack-loader": "^4.2.0",
+    "img-loader": "^2.0.1",
+    "jest": "^22.4.3",
+    "load-google-maps-api": "^1.2.1",
+    "lodash": "^4.17.5",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.8.3",
+    "optimize-css-assets-webpack-plugin": "^4.0.0",
+    "postcss-loader": "^2.1.3",
+    "sass-loader": "^6.0.7",
+    "style-loader": "^0.20.3",
+    "uglifyjs-webpack-plugin": "^1.2.4",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1",
+    "websocket": "^1.0.25",
+    "ws": "^5.1.1"
+  }
+}

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4dd0e1" />
   <title>Restaurant Reviews</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link src="//normalize-css.googlecode.com/svn/trunk/normalize.css" rel="stylesheet">
 </head>
 
 <body>
@@ -15,10 +18,10 @@
   </header>
 
   <main id="maincontent">
-    <section id="map-container">
-      <div id="map"></div>
+    <section id="map-container" aria-hidden="true">
+      <div id="map" aria-hidden="true"></div>
     </section>
-    <section>
+    <section id="list-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
@@ -31,16 +34,9 @@
       <ul id="restaurants-list"></ul>
     </section>
   </main>
-
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>
-
-
+  
   <footer id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright ©2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-
 </body>
-
 </html>

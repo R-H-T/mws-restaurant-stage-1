@@ -1,0 +1,310 @@
+//
+//  Media Queries
+//
++x-small-screen
+  // Info
+  .inside
+    #map-container,
+    #restaurant-img,
+    #restaurant-cuisine,
+    #breadcrumb
+      width: 100%
+    #maincontent
+      padding-top: 240px
+    #map-container
+      position: absolute
+      border-radius: 0
+    #restaurant-container,
+    #reviews-container
+      width: auto
+    #map-container,
+    #restaurant-cusine
+      min-width: 100%
+      width: 100%
+      max-height: 300px
+  // Index
+  .filter-options
+    select
+      max-width: 140px
+    select:last-of-type
+      margin-left: -10px
+  #restaurants-list
+    +grid-columns(1)
+    li
+      max-width: 246px
+      picture
+        img
+          min-width: 306px
+
++x-small-screen-landscape
+  // Info
+  .inside
+    nav
+      max-height: 40px
+    #breadcrumb
+      margin-top: 35px
+      max-height: 14px
+
++small-screen
+  // Info
+  .inside
+    #restaurant-container,
+    #reviews-container
+      width: calc(55% + 5% - 83px)!important
+    #map-container
+      position: fixed
+      width: 45%
+  // Index
+  .filter-options
+    select:last-of-type
+      max-width: 160px
+      margin-left: -10px
+  #restaurants-list[data-count="1"]
+    justify-content: start
+    grid-gap: 20px
+    li:first-of-type
+      margin-left: 22px
+  #restaurants-list
+    +grid-columns(2)
+    grid-gap: 0
+    grid-row-gap: 50px
+    li
+      max-width: 246px
+      picture
+        img
+          min-width: 306px
+
++small-screen-landscape
+  // All
+  nav
+    max-height: 40px
+  #map-container
+    margin-top: - 40px
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 10px
+  // Info
+  .inside
+    #restaurant-container,
+    #reviews-container
+      max-width: calc(100%)!important
+    #breadcrumb
+      margin-top: 35px
+      max-height: 14px
+      width: calc(55% - 80px)
+    #map-container
+      margin-top: -40px
+      position: fixed
+      width: 45%
+      height: 84%
+
++iphone-678-screen-landscape
+  // Info
+  .inside 
+    #restaurant-img
+      margin-top: -25px
+    #map-container
+      width: 40%
+    #maincontent
+      margin-top: -95px
+    #breadcrumb    
+      width: calc(60% - 80px)
+
++iphone-plus-screen-landscape
+  // Index
+  #restaurants-list
+    grid-gap: 0!important
+    grid-row-gap: 40px!important
+  // Info
+  .inside
+    nav
+      max-height: 40px
+    #breadcrumb
+      margin-top: 35px
+      max-height: 14px
+      width: 44%
+    #maincontent
+      padding-top: 0
+      margin-top: -38px - 50px - 5px - 5px
+    #restaurant-img
+      margin-top: -30px
+    #map-container
+      margin-top: -40px
+      position: fixed
+      width: 45%
+      height: 84%
+
++iphone-x-screen-landscape
+  // All
+  nav
+    max-height: 80px!important
+  #map-container
+    margin-top: -40px!important
+  // Index
+  #restaurants-list
+    grid-gap: 0!important
+    grid-row-gap: 65px!important
+    &[data-count="1"]
+      li:first-of-type
+        margin-left: 10%
+  // Info
+  .inside
+    #map-container
+      position: fixed
+      width: 45%
+
++pixel2-xl-screen-landscape
+  // All
+  nav
+    max-height: 40px!important
+  #map-container
+    margin-top: -40px!important
+  // Index
+  #restaurants-list
+    grid-gap: 0!important
+    grid-row-gap: 70px!important
+
++medium-screen
+  // Info
+  .inside
+    #breadcrumb
+      margin-top: 80px
+      min-height: 25px
+    #restaurant-container,
+    #reviews-container
+      width: calc(55% - 85px)!important
+    // #restaurant-img,
+    // #restaurant-cuisine
+    //   width: 90%
+    #maincontent
+      margin-top: 0!important
+      padding: 0
+    #map-container
+      margin-top: 0!important
+      position: fixed
+      height: 80%
+      width: 45%
+  // Index
+  .filter-options
+    +grid-columns(3)
+    max-height: 48px
+    justify-content: right!important
+    h2
+      grid-column-end: 1
+      margin-top: -8px
+      margin-left: 18px
+    select
+      margin-top: 7px
+      margin-left: -20px
+  #restaurants-list
+    +grid-columns(2)
+    grid-gap: 0
+    grid-row-gap: 30px
+    li
+      width: 246px
+      picture
+        img
+          width: 306px
+
++medium-screen-portrait
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 50px
+
++medium-screen-landscape
+  // All
+  nav
+    max-height: 80px
+  #map-container
+    margin-top: 0
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 70px
+  // Info
+  .inside
+    #restaurant-img
+      min-height: 420px!important
+    #maincontent
+      padding-top: 0
+      margin-top: -80px
+    #map-container
+      margin-top: -40px
+
++ipad-pro-screen-portrait
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 20px
+
++large-screen
+  // Index
+  #restaurants-list
+    +grid-columns(3)
+    &[data-count="1"],
+    &[data-count="2"]
+      justify-content: start
+      grid-gap: 20px
+      li:first-of-type
+        margin-left: 12px
+
++large-screen-landscape
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 20px
+
++x-large-screen
+  // Index
+  #restaurants-list
+    +grid-columns(4)
+    &[data-count="1"],
+    &[data-count="2"],
+    &[data-count="3"]
+      justify-content: start
+      width: auto
+      grid-gap: 20px
+      margin-left: 0
+      li:first-of-type
+        margin-left: 12px
+
++x-large-screen-landscape
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 25px
+
++xx-large-screen
+  // Index
+  #restaurants-list
+    +grid-columns(4)
+    grid-row-gap: 20px
+    &[data-count="1"],
+    &[data-count="2"],
+    &[data-count="3"]
+      justify-content: start
+      grid-gap: 20px
+      margin-left: 27px
+      li
+        margin-left: 32px
+
+@media only screen and (min-width: 1460px - 400px) and (max-width: 1461px)
+  // Index
+  #restaurants-list
+    grid-gap: 0
+    grid-row-gap: 20px
+
++xx-large-screen-landscape
+  // Index
+  // #restaurants-list
+  //   grid-gap: 0
+  //   grid-row-gap: 60px
+
+@media only screen and (min-width: $main-content-max-width + 1)
+  // All
+  #maincontent
+    border-left: 1px solid #ddd
+    border-right: 1px solid #ddd
+    box-shadow: 1px 1px 12px rgba(0,0,0,0.2)

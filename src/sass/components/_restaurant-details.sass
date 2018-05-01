@@ -1,0 +1,171 @@
+// ======================
+//   Restaurant Details
+// ======================
+.inside
+  header
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 1001
+  #map-container
+    background: blue none repeat scroll 0 0
+    height: 87%
+    position: fixed
+    right: 0
+    top: 80px
+    width: 45%
+    border-bottom-left-radius: 8px
+    overflow: hidden
+    box-shadow: -1px 1px 20px rgba(0,0,0,0.2)
+    z-index: 1000
+  #map
+    background-color: #ccc
+    height: 100%
+    width: 100%
+  #footer
+    bottom: 0
+    position: relative
+    width: 100%
+  #restaurant-name
+    color: #f18200
+    font-family: Arial, sans-serif
+    font-size: 20pt
+    font-weight: 200
+    letter-spacing: 0
+    margin: 15px 0 30px
+    text-transform: uppercase
+    line-height: 1.1
+  #restaurant-img
+    border: 7px solid #fff
+    margin-left: -7px
+    object-fit: cover
+    object-position: top center
+    box-shadow: 1px 1px 9px rgba(0,0,0,0.2), -1px -1px 9px rgba(0,0,0,0.2)
+    min-width: 100%
+    min-height: 240px!important
+    max-height: 100%
+    width: 100%
+    background-image: $placeholderImage
+    background-position: center center
+    background-repeat: no-repeat
+    background-size: cover
+  #restaurant-address
+    font-size: 12pt
+    margin: 10px 0px
+  #restaurant-cuisine
+    background-color: #333
+    color: #ddd
+    font-size: 12pt
+    font-weight: 300
+    letter-spacing: 10px
+    margin: 0 0 20px
+    padding: 2px 0
+    text-align: center
+    text-transform: uppercase
+    width: 100%
+    min-width: 100%
+  #restaurant-container,
+  #reviews-container
+    border-bottom: 1px solid #d9d9d9
+    border-top: 1px solid #fff
+    padding: 80px 40px 30px
+    width: 100%
+    max-width: calc(100% - 85px)!important
+    margin-left: 3px
+  #reviews-container
+    padding: 30px 40px 80px
+    h2
+      color: #f58500
+      font-size: 24pt
+      font-weight: 300
+      letter-spacing: -1px
+      padding-bottom: 1pt
+  #reviews-list
+    position: relative
+    margin: 0
+    padding: 0
+    width: calc(100% - 30px)
+    li
+      background-color: #fff
+      display: block
+      list-style-type: none
+      margin: 0 0 30px
+      overflow: hidden
+      padding: 0 15px 20px
+      position: relative
+      width: 100%
+      border-radius: 3px
+      border-top-left-radius: 15px
+      border-bottom-right-radius: 15px
+      box-shadow: 1px 1px 9px rgba(0,0,0,0.2), -1px -1px 9px rgba(0,0,0,0.2)
+      &::before
+        content: ''
+        color: white
+        background: #252831
+        height: 52px
+        position: absolute
+        z-index: 0
+        left: 0
+        top: 0
+        border-top-left-radius: 15px
+        border-top-right-radius: 3px
+        width: 100%
+    p
+      margin: 0 0 10px
+      position: relative
+      z-index: 1
+      &:first-child
+        max-width: 40%
+        width: 100%
+        padding-top: 20px
+        padding-bottom: 10px
+        float: left
+        color: white
+        text-transform: uppercase
+        &+p
+          max-width: 60%
+          width: 100%
+          padding-top: 20px
+          padding-bottom: 10px
+          float: right
+          color: white
+          text-align: right
+        &+p+p
+          display: inline-block
+          padding: 8px
+          border-radius: 3px
+          background-color: orange
+          color: white
+          &::after,
+          &[data-rating="5"]::after
+            content: "⭐️⭐️⭐️⭐️⭐️"
+            color: orange
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2)
+            position: absolute
+            right: -108px
+            top: 8px
+            vertical-align: middle
+            text-align: left
+            width: 100px
+            height: 30px
+            background: white
+          &[data-rating="4"]::after
+            content: "⭐️⭐️⭐️⭐"
+          &[data-rating="3"]::after
+            content: "⭐️⭐️⭐️"
+          &[data-rating="2"]::after
+            content: "⭐️⭐️"
+          &[data-rating="1"]::after
+            content: "⭐️"
+          &[data-rating="0"]::after
+            content: ""
+  #restaurant-hours
+    font-size: 16pt
+    width: 100%
+    tr
+      td:first-of-type
+        font-weight: bold
+        border-right: 5px solid #cc5
+    td
+      color: #666
+      padding: 0

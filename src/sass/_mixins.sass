@@ -1,0 +1,134 @@
+// =====================
+//        Mixins
+// =====================
+
+// ------------------------------------------------------
+//                Circle Border Radius
+// ------------------------------------------------------
+// Create a near perfect rounded circle shape
+// based on the view's width and height.
+// Usage: `.circle-image +circle-border-radius(100, 200)`
+=circle-border-radius($width, $height)
+  border-radius: (($width + $height) / 2) / 2
+
+
+// ------------------------------------------------------
+//                    Media Queries
+// ------------------------------------------------------
+// Helper mixins for quickly applying media queries.
+//
+$small-screen-width: 600px
+$medium-screen-width: 768px
+$large-screen-width: 992px
+$x-large-screen-width: 1200px
+$xx-large-screen-width: 1920px - 185px
+
+=x-small-screen
+  @media only screen and (max-width: $small-screen-width)
+    @content
+
+=x-small-screen-portrait
+  @media only screen and (max-width: $small-screen-width) and (orientation: portrait)
+    @content
+
+=x-small-screen-landscape
+  @media only screen and (max-width: $small-screen-width) and (orientation: landscape)
+    @content
+
+=small-screen
+  @media only screen and (min-width: $small-screen-width)
+    @content
+
+=small-screen-portrait
+  @media only screen and (min-width: $small-screen-width) and (orientation: portrait)
+    @content
+
+=small-screen-landscape
+  @media only screen and (min-width: $small-screen-width) and (orientation: landscape)
+    @content
+
+=iphone-678-screen-landscape
+  @media only screen and (min-width: 667px) and (max-height: 375px) and (orientation: landscape)
+    @content
+
+=iphone-plus-screen-landscape
+  @media only screen and (min-width: 732px) and (max-height: 414px) and (orientation: landscape)
+    @content
+
+=iphone-x-screen-landscape
+  @media only screen and (min-width: 812px) and (max-height: 375px) and (orientation: landscape)
+    @content
+
+=pixel2-xl-screen-landscape
+  @media only screen and (min-width: 823px) and (max-height: 411px) and (orientation: landscape)
+    @content
+
+=ipad-pro-screen-portrait
+  @media only screen and (min-width: 1024px) and (max-height: 1366px) and (orientation: portrait)
+    @content
+
+=medium-screen
+  @media only screen and (min-width: $medium-screen-width)
+    @content
+
+=medium-screen-portrait
+  @media only screen and (min-width: $medium-screen-width) and (orientation: portrait)
+    @content
+
+=medium-screen-landscape
+  @media only screen and (min-width: $medium-screen-width) and (orientation: landscape)
+    @content
+
+=large-screen
+  @media only screen and (min-width: $large-screen-width)
+    @content
+
+=large-screen-portrait
+  @media only screen and (min-width: $large-screen-width) and (orientation: portrait)
+    @content
+
+=large-screen-landscape
+  @media only screen and (min-width: $large-screen-width) and (orientation: landscape)
+    @content
+
+=x-large-screen
+  @media only screen and (min-width: $x-large-screen-width)
+    @content
+
+=x-large-screen-portrait
+  @media only screen and (min-width: $x-large-screen-width) and  (orientation: portrait)
+    @content
+
+=x-large-screen-landscape
+  @media only screen and (min-width: $x-large-screen-width) and  (orientation: landscape)
+    @content
+
+=xx-large-screen
+  @media only screen and (min-width: $xx-large-screen-width)
+    @content
+
+=xx-large-screen-portrait
+  @media only screen and (min-width: $xx-large-screen-width) and (orientation: portrait)
+    @content
+
+=xx-large-screen-landscape
+  @media only screen and (min-width: $xx-large-screen-width) and (orientation: landscape)
+    @content
+
+// ------------------------------------------------------
+//                    Grid Layout
+// ------------------------------------------------------
+//
+=grid-columns($num)
+  @if $num == 6
+    grid-template-columns: auto auto auto auto auto auto
+  @else if $num == 5
+    grid-template-columns: auto auto auto auto auto
+  @else if $num == 4
+    grid-template-columns: auto auto auto auto
+  @else if $num == 3
+    grid-template-columns: auto auto auto
+  @else if $num == 2
+    grid-template-columns: auto auto
+  @else
+    grid-template-columns: auto
