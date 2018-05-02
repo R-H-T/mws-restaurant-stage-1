@@ -27,7 +27,8 @@ Restaurant Reviews is perhaps already pretty much self-explanatory. Its main fun
 
 ### Begin Development
 1. Run `npm run images` whenever you add any new images to `src/img_src` (*see the "Image Workflow"-section for more details*).
-2. Run `npm run start` to start in live Development Mode. Make any changes inside the "`src/`"-directory. The following url will get automatically opened in your default browser: http://localhost:8080/
+2. Update the Google Maps API key to your own (*see the `TODO` inside `src/index.js`*).
+3. Run `npm run start` to start in live Development Mode. Make any changes inside the "`src/`"-directory. The following url will get automatically opened in your default browser: http://localhost:8080/
 
 ---
 
