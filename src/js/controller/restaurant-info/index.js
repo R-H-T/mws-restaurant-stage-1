@@ -1,5 +1,7 @@
 import DBHelper from '../../utils/dbhelper';
 import ResponsiveImage from '../../gw/gw-responsive-image';
+import Breadcrumb from '../../view/breadcrumb';
+import BreadcrumbLink from '../../view/breadcrumb/breadcrumb-link';
 
 /* global google */
 class RestaurantInfoController {
@@ -60,21 +62,22 @@ class RestaurantInfoController {
    * Create restaurant HTML and add it to the webpage
    */
   fillRestaurantHTML(restaurant = this.restaurant) {
-    const name = document.getElementById('restaurant-name');
-    name.innerHTML = restaurant.name;
+    const nameEl = document.getElementById('restaurant-name');
+    const { name, address, cuisine_type, operating_hours } = restaurant;
+    nameEl.innerHTML = name;
 
-    const address = document.getElementById('restaurant-address');
-    address.innerHTML = restaurant.address;
+    const addressEl = document.getElementById('restaurant-address');
+    addressEl.innerHTML = address;
 
-    let image = document.getElementById('restaurant-img');
+    let imageEl = document.getElementById('restaurant-img');
     const imgSrc = DBHelper.imageUrlForRestaurant(restaurant);
-    (new ResponsiveImage(imgSrc, restaurant.name, null, null, image));
+    (new ResponsiveImage(imgSrc, name, null, null, imageEl));
 
-    const cuisine = document.getElementById('restaurant-cuisine');
-    cuisine.innerHTML = restaurant.cuisine_type;
+    const cuisineEl = document.getElementById('restaurant-cuisine');
+    cuisineEl.innerHTML = cuisine_type;
 
     // fill operating hours
-    if (restaurant.operating_hours) {
+    if (operating_hours) {
       this.fillRestaurantHoursHTML();
     }
     // fill reviews
@@ -106,7 +109,7 @@ class RestaurantInfoController {
    */
   fillReviewsHTML(reviews = this.restaurant.reviews) {
     const container = document.getElementById('reviews-container');
-    const title = document.createElement('h2');
+    const title = document.createElement('h3');
     title.innerHTML = 'Reviews';
     container.appendChild(title);
 
@@ -127,23 +130,24 @@ class RestaurantInfoController {
    * Create review HTML and add it to the webpage.
    */
   createReviewHTML(review) {
+    const { name, date, rating, comments } = review;
     const li = document.createElement('li');
-    const name = document.createElement('p');
-    name.innerHTML = review.name;
-    li.appendChild(name);
+    const nameEl = document.createElement('p');
+    nameEl.innerHTML = name;
+    li.appendChild(nameEl);
 
-    const date = document.createElement('p');
-    date.innerHTML = review.date;
-    li.appendChild(date);
+    const dateEl = document.createElement('p');
+    dateEl.innerHTML = date;
+    li.appendChild(dateEl);
 
-    const rating = document.createElement('p');
-    rating.innerHTML = `Rating: ${review.rating}`;
-    rating.setAttribute('data-rating', `${review.rating}`);
-    li.appendChild(rating);
+    const ratingEl = document.createElement('p');
+    ratingEl.innerHTML = `Rating: ${ rating }`;
+    ratingEl.setAttribute('data-rating', `${ rating }`);
+    li.appendChild(ratingEl);
 
-    const comments = document.createElement('p');
-    comments.innerHTML = review.comments;
-    li.appendChild(comments);
+    const commentsEl = document.createElement('p');
+    commentsEl.innerHTML = comments;
+    li.appendChild(commentsEl);
 
     return li;
   }
@@ -151,11 +155,14 @@ class RestaurantInfoController {
   /**
    * Add restaurant name to the breadcrumb navigation menu
    */
-  fillBreadcrumb(restaurant=this.restaurant) {
-    const breadcrumb = document.getElementById('breadcrumb');
-    const li = document.createElement('li');
-    li.innerHTML = restaurant.name;
-    breadcrumb.appendChild(li);
+  fillBreadcrumb(restaurant = this.restaurant) {
+    const currentLink = new BreadcrumbLink(null, restaurant.name);
+    currentLink.isActive = true;
+    const links = [
+      new BreadcrumbLink(null, 'Home', '/'),
+      currentLink
+    ];
+    new Breadcrumb(document.getElementById('breadcrumb'), links);
   }
 
   /**

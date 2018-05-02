@@ -7,7 +7,7 @@
     #map-container,
     #restaurant-img,
     #restaurant-cuisine,
-    #breadcrumb
+    #breadcrumb ul
       width: 100%
     #maincontent
       padding-top: 240px
@@ -39,9 +39,9 @@
 +x-small-screen-landscape
   // Info
   .inside
-    nav
+    nav:first-of-type
       max-height: 40px
-    #breadcrumb
+    #breadcrumb ul
       margin-top: 35px
       max-height: 14px
 
@@ -89,7 +89,7 @@
     #restaurant-container,
     #reviews-container
       max-width: calc(100%)!important
-    #breadcrumb
+    #breadcrumb ul
       margin-top: 35px
       max-height: 14px
       width: calc(55% - 80px)
@@ -108,7 +108,7 @@
       width: 40%
     #maincontent
       margin-top: -95px
-    #breadcrumb    
+    #breadcrumb ul
       width: calc(60% - 80px)
 
 +iphone-plus-screen-landscape
@@ -118,9 +118,9 @@
     grid-row-gap: 40px!important
   // Info
   .inside
-    nav
+    nav:first-of-type
       max-height: 40px
-    #breadcrumb
+    #breadcrumb ul
       margin-top: 35px
       max-height: 14px
       width: 44%
@@ -168,7 +168,7 @@
 +medium-screen
   // Info
   .inside
-    #breadcrumb
+    #breadcrumb ul
       margin-top: 80px
       min-height: 25px
     #restaurant-container,
