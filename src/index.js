@@ -3,6 +3,8 @@ import './sass/main.sass';
 import { IndexController, RestaurantInfoController } from './js/controller';
 
 {
+  const mapsAPIKey = 'YOUR_GOOGLE_MAPS_API_KEY_HERE'; // TODO: Change this to your API key
+
   const route = (pathname, callback) => {
     if (pathname.constructor === Array) {
       for (var pn of pathname) {    
@@ -18,10 +20,10 @@ import { IndexController, RestaurantInfoController } from './js/controller';
 
   route(['/', '/index.html'], () => {
     new IndexController();
-    loadGoogleMapsApi({key: 'AIzaSyDfc7m94RiPm0y0mQlj5XySOM2q-nbW6N0', language: 'en'}).then(window.initMap);
+    loadGoogleMapsApi({key: mapsAPIKey, language: 'en'}).then(window.initMap);
   });
   route('/restaurant.html', () => {
     new RestaurantInfoController();
-    loadGoogleMapsApi({key: 'AIzaSyDfc7m94RiPm0y0mQlj5XySOM2q-nbW6N0', language: 'en'}).then(window.initMap);
+    loadGoogleMapsApi({key: mapsAPIKey, language: 'en'}).then(window.initMap);
   });
 }
