@@ -16,13 +16,24 @@ app
     next();
   })
   .get('/', (request, response) => {
-    response.send('404');
+    response.status(404).send('404 - Not found');
   })
   .get('/restaurants', (request, response) => {
     response.header('Access-Control-Allow-Origin', '*');
     response.header('Access-Control-Allow-Methods', 'GET');
     response.header('Access-Control-Allow-Headers', 'Content-Type');
     response.sendFile(path.resolve(dataFilePath), { maxAge: 0 });
+  })
+  .get('/restaurants/:id', (request, response) => {
+    response.header('Access-Control-Allow-Origin', '*');
+    response.header('Access-Control-Allow-Methods', 'GET');
+    response.header('Access-Control-Allow-Headers', 'Content-Type');
+    const id = Number.parseInt(encodeURI(request.params.id));
+    if (Object.is(id, NaN)) { response.status(400).send('400 - Bad request'); return; }
+    const { restaurants = null } = JSON.parse(fs.readFileSync(dataFilePath));
+    const restaurant = restaurants.filter(restaurant => (restaurant.id === id))[0] || null;
+    if (!restaurant) { response.status(404).send('404 - Not found'); return; }
+    response.send(restaurant);
   });
 
 wss.on('connection', socket => {
