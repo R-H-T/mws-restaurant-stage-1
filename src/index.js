@@ -4,7 +4,7 @@ import './sass/main.sass';
 import './sass/layouts.sass';
 import loadGoogleMapsApi from 'load-google-maps-api';
 {
-  const mapsAPIKey = 'AIzaSyDfc7m94RiPm0y0mQlj5XySOM2q-nbW6N0'; // TODO: Change this to your API key
+  const mapsAPIKey = 'YOUR_GOOGLE_MAPS_API_KEY_HERE'; // TODO: Change this to your API key
 
   const route = (pathname, callback) => {
     if (pathname.constructor === Array) {
