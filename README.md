@@ -1,11 +1,12 @@
-# MWS – Project: Restaurant Reviews - Stage 1
+# MWS – Project: Restaurant Reviews - Stage 2
 
 ---
 
 ## Project Details
-The Restaurant Reviews Stage 1 project is part of a 3-stages project included in the curriculum of the Mobile Web Specialist Nanodegree Program created by Google & Udacity.
+The Restaurant Reviews Stage 2 project is part of a 3-stages project included in the curriculum of the Mobile Web Specialist Nanodegree Program created by Google & Udacity.
 
-**Restaurant Reviews Stage 1** – This stage demonstrates my abilities to turn a Non-Mobile Ready, Non-Accessible, and Non-PWA project into a fully Accessible, and functioning Progressive Web App with a genuine first class Offline First user experience. Utilizing the powerful Service Worker feature which will replace the old App Cache. Thus, demonstrating the initial skillsets I obtained from my training during the first period of the program along with my previously acquired skills.
+**Restaurant Reviews Stage 1-2** – These stages demonstrates my abilities to turn a Non-Mobile Ready, Non-Accessible, and Non-PWA project into a fully Accessible, and functioning Progressive Web App with a genuine first class Offline First user experience. Utilizing the powerful Service Worker feature which will replace the old App Cache. Thus, demonstrating the initial skillsets I obtained from my training during the first period of the program along with my previously acquired skills.
+Stage 2 introduces some major optimizations to the web app which can be measured with Google's Lighthouse utilities. I've also added lazy loading for all images in this stage.
 
 ---
 
@@ -30,10 +31,16 @@ Restaurant Reviews is perhaps already pretty much self-explanatory. Its main fun
 2. Update the Google Maps API key to your own (*see the `TODO` inside `src/index.js`*).
 3. Run `npm run start` to start in live Development Mode. Make any changes inside the "`src/`"-directory. The following url will get automatically opened in your default browser: http://localhost:8080/
 
+### Lighthouse Testing
+After running the two first steps of **Begin Development**:
+1. Run `npm run audit` and open either http://localhost:8181/ or https://localhost:8443/ (Requires a trusted certificate).
+2. Open Incognito-mode in the Chrome browser and disable any plugins to avoid interferance during tests.
+3. Run Chrome Lighthouse in the Developer Tools panel (check Accessibility, Performance, Progressive Web App).
 ---
 
 ## Available Commands
 * `npm run start` – Builds and starts the project in Development Mode (Webpack Dev Server). This environment enables Live Reloading of any changes you make to the watched directories configured within the `webpack.config.js`-file. A Node.js server will be providing the Web Socket connection and the Restaurants Data API.
+* `npm run audit` – Builds and starts the project in Production mode with a test server (Node & Express, Webpack Dev Server Middleware). This command is intended for Lighthouse testing in Chrome.
 * `npm run dev` – Builds the project in plain Development Mode. The files will be generated inside the dist folder and most of the files will be un-minified for debugging purposes (_Not recommended for production - see `npm run build` instead_).
 * `npm run watch` – Starts a Watch task in Development Mode.
 * `npm run images` – Generates responsive images from `src/img_source/` to `src/img/`. Any image you wish not to be processed should go into the `src/img_source/fixed/`-directory.
