@@ -6,11 +6,11 @@ describe('File Info', () => {
   let sut;
 
   beforeEach(() => {
-    sut = FileInfo('img/1-medium.jpg');
+    sut = new FileInfo('img/1-medium.jpg');
   });
 
   it('should exist', () => {
-    sut = FileInfo('img/1-medium.jpg');
+    sut = new FileInfo('img/1-medium.jpg');
     expect(sut).toBeTruthy();
   });
 
@@ -19,7 +19,7 @@ describe('File Info', () => {
   });
 
   it('should return empty path', () => {
-    sut = FileInfo('1-medium.jpg');
+    sut = new FileInfo('1-medium.jpg');
     expect(sut.path).toBe('');
   });
 

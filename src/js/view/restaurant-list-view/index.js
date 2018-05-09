@@ -2,18 +2,18 @@ import DataSource from '../../model/datasource';
 import RestaurantListItemView from '../restaurant-list-item-view';
 
 class RestaurantListView {
-  constructor(values={ el: null, items: [], filters: [], sort: null }) {
-    const { el, items, filters, sort } = values;
+  constructor(values={ el: null, items: [], filters: [], sort: null, dataSource: null }) {
+    const { el, items, filters, sort, dataSource } = values;
     this.el = el;
-    this.dataSource = new DataSource(items, filters, sort);
+    this.dataSource =  dataSource || new DataSource(items, filters, sort);
     this.setup();
   }
   
   get restaurants() { return this.dataSource.items; }
-  set restaurants(newValue) { this.dataSource.items = newValue; this.removeAllRows(); this.populateRows(); }
+  set restaurants(newValue) { this.dataSource.items = newValue; this.populateRows(); }
   set filters(newValue) { this.dataSource.filters = newValue; }
   get sort() { return this.dataSource.sort; }
-  set sort(newValue) { this.dataSource.sort = newValue; }
+  set sort(newValue) { this.dataSource.sort = newValue; this.populateRows(); }
   get listItemCount() { return this.dataSource.itemsCount; }
   
   setup() {
@@ -31,6 +31,7 @@ class RestaurantListView {
   }
 
   populateRows() {
+    this.removeAllRows();
     this.el.setAttribute('data-count', `${ (this.dataSource.itemsCount || 0) }`);
     this.restaurants.forEach(restaurant => {
       this.el.appendChild(new RestaurantListItemView(restaurant).el);

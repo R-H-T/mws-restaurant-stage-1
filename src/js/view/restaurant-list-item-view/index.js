@@ -10,7 +10,7 @@ class RestaurantListItemView {
         responsiveImage.className = 'restaurant-img';
         el.append(responsiveImage.el);
 
-        const nameEl = document.createElement('h1');
+        const nameEl = document.createElement('h3');
         nameEl.innerHTML = name;
         el.append(nameEl);
 
@@ -38,7 +38,7 @@ export const urlForRestaurant = restaurant => {
 };
 
 export const imageUrlForRestaurant = restaurant => {
-    const info = FileInfo(restaurant.photograph);
+    const info = new FileInfo(restaurant.photograph);
     const url = `/img/${info.name}-medium.${info.extension}`;
     return url;
 };

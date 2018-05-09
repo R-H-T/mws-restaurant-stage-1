@@ -5,9 +5,9 @@
 
 const APP_ID = 'restaurant_reviews';
 const MAIN_CACHE_VERSION = 1;
-const MAIN_CACHE_BASE_NAME = `${APP_ID}-static`;
-const MAIN_CACHE_NAME = `${MAIN_CACHE_BASE_NAME}-v${MAIN_CACHE_VERSION}`;
-const IMAGE_CACHE_NAME = `${APP_ID}-content-imgs`;
+const MAIN_CACHE_BASE_NAME = `${ APP_ID }-static`;
+const MAIN_CACHE_NAME = `${ MAIN_CACHE_BASE_NAME }-v${ MAIN_CACHE_VERSION }`;
+const IMAGE_CACHE_NAME = `${ APP_ID }-content-imgs`;
 const CURRENT_CACHES = {
   main: MAIN_CACHE_NAME,
   images: IMAGE_CACHE_NAME,
@@ -20,7 +20,6 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CURRENT_CACHES.main).then(cache => {
       return cache.addAll([
-        'http://localhost:8181/restaurants',
         'index.html',
         'restaurant.html',
         'main.js',
@@ -48,12 +47,6 @@ self.addEventListener('activate', event =>
 
 self.addEventListener('fetch', event => {
   const requestUrl = new URL(event.request.url);
-  if (requestUrl.href.startsWith('http://localhost:8181/')) {
-      if (requestUrl.pathname.startsWith('/restaurants')) {
-        event.respondWith(caches.match('http://localhost:8181/restaurants'));
-        return;
-      }
-  }
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/') {
       event.respondWith(caches.match('index.html'));

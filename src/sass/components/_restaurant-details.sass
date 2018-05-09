@@ -27,7 +27,6 @@
     position: relative
     width: 100%
   #restaurant-name
-    color: #f18200
     font-family: Arial, sans-serif
     font-size: 20pt
     font-weight: 200
@@ -66,6 +65,9 @@
     min-width: 100%
   #restaurant-container,
   #reviews-container
+    & h2,
+    & h3
+      color: $secondary-dark-color
     border-bottom: 1px solid #d9d9d9
     border-top: 1px solid #fff
     padding: 80px 40px 30px
@@ -75,7 +77,6 @@
   #reviews-container
     padding: 30px 40px 80px
     h3
-      color: #f58500
       font-size: 24pt
       font-weight: 300
       letter-spacing: -1px
@@ -134,8 +135,8 @@
           display: inline-block
           padding: 8px
           border-radius: 3px
-          background-color: orange
-          color: white
+          background-color: #ff9800
+          color: #5a3800
           &::after,
           &[data-rating="5"]::after
             content: "⭐️⭐️⭐️⭐️⭐️"

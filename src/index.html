@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en"><!-- manifest="main.manifest"> -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4dd0e1" />
   <title>Restaurant Reviews</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link src="//normalize-css.googlecode.com/svn/trunk/normalize.css" rel="stylesheet">
+  <meta name="application-name" content="Restaurant Reviews">
+  <meta name="apple-mobile-web-app-title" content="Restaurant Reviews">
+  <meta name="description" content="Restaurant Reviews web app">
+  <meta name="keywords" content="restaurant, reviews">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="theme-color" content="#252831">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/img/icon.png" sizes="144x144">
+  <link rel="apple-touch-icon" href="/img/touch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/img/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/img/touch-icon-ipad-retina.png">
+  <link rel="apple-touch-startup-image" href="/img/launch.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link src="https://normalize-css.googlecode.com/svn/trunk/normalize.css" rel="stylesheet">
 </head>
 
 <body>
@@ -19,15 +32,15 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map" aria-role="application"></div>
+      <div id="map" role="application"></div>
     </section>
     <section id="list-container">
       <div class="filter-options">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select id="neighborhoods-select" name="neighborhoods">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines">
           <option value="all">All Cuisines</option>
         </select>
       </div>

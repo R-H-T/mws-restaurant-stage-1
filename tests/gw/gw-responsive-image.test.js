@@ -1,4 +1,4 @@
-
+import 'intersection-observer';
 import ResponsiveImage from '../../src/js/gw/gw-responsive-image';
 /* global describe, beforeEach, it, expect */
 

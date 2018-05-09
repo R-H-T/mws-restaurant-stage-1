@@ -1,6 +1,4 @@
-import idb from 'idb';
-import dbc from './config';
-import { IMAGE_CACHE_NAME } from './config';
+import { IMAGE_CACHE_NAME } from '../../model/restaurants-manager/config';
 import DBHelper from '../../utils/dbhelper';
 import RestaurantListView from '../../view/restaurant-list-view';
 import Toast from '../../view/toast';
@@ -9,27 +7,30 @@ import ToastController from '../toast';
 import TimeoutTracker from '../../gw/gw-timeout-tracker';
 import CounterView from '../../gw/gw-counter-view';
 import SelectView from '../../view/select-view';
+import RestaurantsManager from '../../model/restaurants-manager';
+import sleep from '../../utils/sleep';
 
 /**
   * Update page and map for current restaurants.
   */
 class IndexController {
   constructor() {
-    this._timeoutTracker = new TimeoutTracker();
-    this.cuisines;
     this.map;
     this.markers = [];
-    this.restaurantListView = new RestaurantListView();
     this.toastsView = new Toast('');
     this._lostConnectionToast = new Toast('');
+    this._timeoutTracker = new TimeoutTracker();
 
     // Bind
     this.updateRestaurants = this.updateRestaurants.bind(this);
-    window.updateRestaurants = this.updateRestaurants;
+    this.updateRestaurantViews = this.addMarkersToMap.bind(this);
     this.openSocket = this.openSocket.bind(this);
+    this.fillCuisinesHTML = this.fillCuisinesHTML.bind(this);
+    this.fillNeighborhoodsHTML = this.fillNeighborhoodsHTML.bind(this);
+    this.resetRestaurants = this.resetMarkers.bind(this);
+    this.addMarkersToMap = this.addMarkersToMap.bind(this);
     
-    // SW & Cache
-    this.dbPromise = openDatabase();
+    // SW
     this.registerServiceWorker();
     
     // TODO: Add clean image cache with appropriate time interval
@@ -40,53 +41,26 @@ class IndexController {
 
     this._toastController = new ToastController();
     document.body.append(this._toastController.el);
+    
+    const callback = () => {
+      requestAnimationFrame(() => {
+        this.resetMarkers();
+        this.fillNeighborhoodsHTML(this._restaurantsManager.neighborhoods);
+        this.fillCuisinesHTML(this._restaurantsManager.cuisines);
+        this.restaurantListView.populateRows();
+        this.openSocket();
+      });
+    };
+    this._restaurantsManager = new RestaurantsManager(null, callback);
+    this.restaurantListView = new RestaurantListView({ dataSource: this._restaurantsManager });
 
-    this.showCachedRestaurants().then(() => {
-      this.openSocket();
-    })
-    .catch(error => {
-      console.log('error', error);
-    });
-
-    this.fetchNeighborhoods();
-    this.fetchCuisines();
     this.setupMap();
   }
 
   get restaurants() { return this.restaurantListView.restaurants || []; }
   set restaurants(newValue) { this.restaurantListView.restaurants = newValue || []; }
-  
-  clearRestaurants() { this.restaurantListView.clearRestaurants(); }
-
-  showCachedRestaurants() {
-    return this.dbPromise.then(db => {
-      const isShowingRestaurants = (this.restaurantListView.listItemCount > 0);
-      if (!db || isShowingRestaurants) return Promise.resolve();
-      const restaurantsOSKey = dbc.objectStoreKeys.restaurants;
-      const restaurantsObjectStoreKeyIndexes = dbc.objectStoreKeysIndexes[restaurantsOSKey];
-      const primaryKeyIndexName = restaurantsObjectStoreKeyIndexes[0].name;
-      const index = db.transaction(restaurantsOSKey).objectStore(restaurantsOSKey).index(primaryKeyIndexName);
-      index.getAll().then(restaurants => {
-        if (restaurants.length > 0) {
-          this.restaurantListView.addRestaurants(restaurants.reverse());
-        }
-      });
-    });
-  }
-
-  /**
-   * Fetch all neighborhoods and set their HTML.
-   */
-  fetchNeighborhoods() {
-    DBHelper.fetchNeighborhoods((error, neighborhoods) => {
-      if (error) { // Got an error
-        console.error('Error', error);
-        return;
-      }
-      this.neighborhoods = neighborhoods;
-      this.fillNeighborhoodsHTML();
-    });
-  }
+  get neighborhoods() { this._restaurantsManager.neighborhoods || []; }
+  get cuisines() { this._restaurantsManager.cuisines || []; }
 
   /**
    * Set neighborhoods HTML.
@@ -94,21 +68,9 @@ class IndexController {
   fillNeighborhoodsHTML(neighborhoods = this.neighborhoods) {
     const select = document.getElementById('neighborhoods-select');
     if (select === null) return;
+    if (!(select.children.length <= 1)) return;
+    select.onchange = () => { this.updateRestaurants() };
     new SelectView(select, 'Neighborhoods', neighborhoods);
-  }
-
-  /**
-   * Fetch all cuisines and set their HTML.
-   */
-  fetchCuisines() {
-    DBHelper.fetchCuisines((error, cuisines) => {
-      if (error) { // Got an error!
-        console.error('Error', error);
-        return;
-      }
-      this.cuisines = cuisines;
-      this.fillCuisinesHTML();
-    });
   }
 
   /**
@@ -117,6 +79,8 @@ class IndexController {
   fillCuisinesHTML(cuisines = this.cuisines) {
     const select = document.getElementById('cuisines-select');
     if (select === null) return;
+    if (!(select.children.length <= 1)) return;
+    select.onchange = () => { this.updateRestaurants() };
     new SelectView(select, 'Cuisines', cuisines);
   }
 
@@ -125,17 +89,26 @@ class IndexController {
      * Initialize Google map, called from HTML.
      */
     window.initMap = googleMaps => {
-      window.googleMaps = googleMaps;
-      let loc = {
-        lat: 40.722216,
-        lng: -73.987501
-      };
-      this.map = new googleMaps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: loc,
-        scrollwheel: false
-      });
-      this.updateRestaurants();
+      sleep(100)
+      .then(() =>
+        requestAnimationFrame(() => {
+          if (typeof google === 'undefined') {
+            this.updateRestaurants();
+            return;
+          }
+          window.googleMaps = googleMaps;
+          let loc = {
+            lat: 40.722216,
+            lng: -73.987501
+          };
+          this.map = new googleMaps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: loc,
+            scrollwheel: false
+          });
+          this.updateRestaurants();
+        })
+      );
     };
   }
 
@@ -152,41 +125,34 @@ class IndexController {
     const cuisine = cSelect[cIndex].value;
     const neighborhood = nSelect[nIndex].value;
 
-    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-      if (error) { // Got an error!
-        console.error('Error', error);
-        return;
-      }
-      this.cacheRestaurants(restaurants);
-      this.resetRestaurants(restaurants);
-      this.updateRestaurantViews();
+    this._restaurantsManager.fetchRestaurantsByNeighborhoodAndByCuisine(cuisine, neighborhood);
+    
+    const updateViews = () => requestAnimationFrame(() => {
+      this.resetMarkers();
+      this.addMarkersToMap();
+      this.fillNeighborhoodsHTML(this._restaurantsManager.neighborhoods);
+      this.fillCuisinesHTML(this._restaurantsManager.cuisines);
+      this.restaurantListView.populateRows();
+    });
+
+    this._restaurantsManager.updateLists(true, neighborhood, cuisine)
+    .then(updateViews)
+    .catch(() => {
+      this._restaurantsManager.updateLists(false, neighborhood, cuisine)
+      .then(updateViews)
+      .catch(error => { console.log('Error on second attempt:', error); });
     });
   }
 
-  cacheRestaurants(restaurants) {
-    // TODO: Cache restaurants with idb.
-  }
-
   /**
-   * Clear current restaurants, their HTML and remove their map markers.
+   * Reset map markers.
    */
-  resetRestaurants(restaurants) {
+  resetMarkers() {
+    if (typeof google === 'undefined') return;
     this.markers = this.markers || [];
-    // Remove all restaurants
-    this.clearRestaurants();
-
     // Remove all map markers
-    this.markers.forEach(marker => marker.setMap(null));
+    this.markers.forEach(marker => { marker.setMap(null); });
     this.markers = [];
-    this.restaurants = restaurants;
-  }
-
-  /**
-   * Create all restaurants HTML and add them to the webpage.
-   */
-  updateRestaurantViews (restaurants = this.restaurants) {
-    this.restaurants = restaurants;
-    this.addMarkersToMap();
   }
 
   /**
@@ -195,6 +161,7 @@ class IndexController {
   addMarkersToMap(restaurants = this.restaurants) {
     restaurants.forEach(restaurant => {
       /* global google */
+      if (typeof google === 'undefined') return;
       // Add marker to the map
       const marker = DBHelper.mapMarkerForRestaurant(restaurant, this.map);
       google.maps.event.addListener(marker, 'click', () => {
@@ -298,8 +265,10 @@ class IndexController {
   }
 
   openSocket() {
-    const socketUrl = new URL('/updates', 'http://localhost:8181');
-    socketUrl.protocol = 'ws';
+    const isSSL = (window.location.protocol === 'https:');
+    const protocol = `ws${ (isSSL) ? 's' : '' }:`;
+    const socketUrl = new URL('/updates', `${ protocol }//localhost:${ (isSSL) ? 8443 : 8181 }`);
+    socketUrl.protocol = protocol;
 
     const ws = new WebSocket(socketUrl.href);
 
@@ -349,23 +318,5 @@ class IndexController {
     });
   }
 }
-
-function openDatabase () {
-  if (!navigator.serviceWorker) return Promise.resolve();
-  // Init all keys and configure any options as needed.
-  Object.keys(dbc.objectStoreKeys).map(key => {
-    dbc.objectStoreDefaultOptions[key] = {};
-  });
-  const restaurantsOSKey = dbc.objectStoreKeys.restaurants;
-  dbc.objectStoreDefaultOptions[restaurantsOSKey].keyPath = dbc.objectKeys.restaurants.id;
-  return idb.open(dbc.name, dbc.version, db => {
-    const keyPath = 'id';
-    const store = db.createObjectStore(restaurantsOSKey, { keyPath });
-    const restaurantsObjectStoreKeyIndexes = dbc.objectStoreKeysIndexes[restaurantsOSKey];
-    for (const { name, keyPath } of restaurantsObjectStoreKeyIndexes) {
-      store.createIndex(name, keyPath);
-    }
-  });
-};
 
 export default IndexController;

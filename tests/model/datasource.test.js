@@ -55,10 +55,12 @@ describe('Data Source', () => {
   });
 
   it('should get empty array when items are initialized with null while sort and filter are active', () => {
-    sut = new DataSource();
-    // sut.sort = (a, b) => (a < b);
-    sut.filter = (item) => (item.id < 0);
-    expect(sut.items).toEqual([]);
+    const firstItem = sut.getItem(0);
+    sut.sort = (a, b) => (a.name < b.name);
+    expect(sut.getItem(0).id).toEqual(1);
+    sut.filter = (item) => (item.id === firstItem.id);
+    expect(sut.items).toHaveLength(1);
+    expect(sut.items[0]).toBe(firstItem);
   });
 
   it('should get item at index', () => {

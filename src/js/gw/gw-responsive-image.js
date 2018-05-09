@@ -10,6 +10,21 @@ class ResponsiveImage {
     this.imageAlt = alt;
     this.imageId = id;
     this.imageClassName = className;
+    this.intersectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = entry.target;
+          target.classList.add('active');
+          const elements = [...target.querySelectorAll('source'), target.querySelector('img')];
+          const copyAttribute = (el) => {
+            if (el.dataset.src) el.src = el.dataset.src;
+            if (el.dataset.srcset) el.srcset = el.dataset.srcset;
+          };
+          elements.forEach(copyAttribute);
+          this.intersectionObserver.unobserve(target);
+        }
+      });
+    });
 
     if (imageElement !== null) {
       imageSource = imageElement.src || imageSource;
@@ -18,7 +33,7 @@ class ResponsiveImage {
       this.imageClassName = imageElement.className || this.imageClassName || '';
     }
 
-    const { name, extension, path } = FileInfo(imageSource);
+    const { name, extension, path } = new FileInfo(imageSource);
     let baseName = name;
 
     const getIndex = (query) => name.indexOf(query);
@@ -76,13 +91,13 @@ responsivePicture(imageName, fileExtension = 'jpg', path = 'img/') {
     const createPicture = () => {
       const source = (srcSet, mediaQuery) => {
         const el = document.createElement('source');
-        el.srcset = srcSet;
+        el.setAttribute('data-srcset', srcSet);
         el.media = mediaQuery;
         return el;
       };
       const img = (src, alt, id, className) => {
         const el = document.createElement('img');
-        el.src = src;
+        el.setAttribute('data-src', src);
         el.alt = alt;
         el.id = id;
         el.className = className;
@@ -93,12 +108,18 @@ responsivePicture(imageName, fileExtension = 'jpg', path = 'img/') {
       const mediumSource = source(image1to3x(mediumImage), '(min-width: 641px)');
       const largeSource = source(image1to3x(largeImage), '(min-width: 801px)');
       const defaultImage = img(defaultImageFile, this.imageAlt, this.imageId, this.imageClassName);
+      defaultImage.setAttribute('data-src', defaultImageFile);
+      defaultImage.src = '';
       this.imageEl = defaultImage;
       const el = document.createElement('picture');
       el.appendChild(smallSource);
       el.appendChild(mediumSource);
       el.appendChild(largeSource);
       el.appendChild(defaultImage);
+      
+      // Add for observation (lazy loading);
+      this.intersectionObserver.observe(el);
+
       return el;
     };
     return createPicture();

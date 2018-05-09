@@ -27,7 +27,7 @@ class DataSource {
     this.filter = filter;
     this.sort = sort;
   }
-  set items(newValue) { this._items = newValue || []; }
+  set items(newValue) { this._items = (((this.sort) ? newValue.sort(this.sort) : newValue) || []); }
   get items() {
     const items = (this.sort) ? ([...this._items].sort(this.sort) || []) : (this._items || []);
     return (this.filter && this.filter.length > 0) ? _.filter(items, this._filter) : items;
