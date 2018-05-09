@@ -1,18 +1,37 @@
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.js');
+webpackConfig.mode = 'production';
+const compiler = webpack(webpackConfig);
+const webpackDevMiddleware = require('webpack-dev-middleware');
 const app = require('express')();
 const server = require('http').Server(app);
-const wss = new(require("ws").Server)({ server, path: '/updates' });
+const https = require('https');
+const ws = new(require('ws').Server)({ server, path: '/updates' });
+const compression = require('compression');
 
 const dataFilePath = path.join(__dirname, 'data/restaurants.json');
-const port = 8181;
+const url_protocol = 'http';
+const url_host = 'localhost'
+const server_url_port = 8181;
+const fullUrlPath = (port = server_url_port, host = url_host, protocol = url_protocol) => `${protocol}://${host}${(port) ? `:${port}` : '' }`;
 
-console.log('Starting server...');
-
+const secureServer = https.createServer({
+  key: fs.readFileSync(path.join(__dirname, 'ssl-cert/key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'ssl-cert/cert.pem'))
+}, app).listen(8443, () => {
+  console.log(`HTTPS – Listening to port ${ 8443 }`);
+});
+const wss = new(require('ws').Server)({ server: secureServer, path: '/updates' });
+console.log(`Starting server at ${ fullUrlPath(null) }...`);
+app.use(compression());
+app.use(webpackDevMiddleware(compiler, { publicPath: '/' }));
+app.use(require("webpack-hot-middleware")(compiler));
 app
   .use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   })
   .get('/', (request, response) => {
@@ -36,28 +55,34 @@ app
     response.send(restaurant);
   });
 
-wss.on('connection', socket => {
-  console.log('Connecting socket...');
+const handleSocket = socket => {
+  console.log('Connecting to socket...');
   let sendNow = [];
 
   socket.on('open', () => {
-    console.log('socket opening...');
+    console.log('– socket open');
   });
 
   socket.on('close', () => {
-    console.log('socket closing...');
+    console.log('– socket closed');
   });
 
   socket.on('message', message => {
-    console.log('Message received: %s', message);
+    console.log(`– message received: "${message}"`);
     if (message.type === 'utf8') {
       sendNow.push(message);
     }
   });
-
-  if (sendNow.length) {
+  const sendNowLength = sendNow.length;
+  if (sendNowLength) {
+    console.log(`– sending ${`sending ${sendNowLength} message${((sendNowLength > 1) ? 's' : '')}`}`);
     socket.send(JSON.stringify(sendNow));
   }
-});
+};
 
-server.listen(port);
+ws.on('connection', handleSocket);
+wss.on('connection', handleSocket);
+
+server.listen(server_url_port, () => {
+  console.log(`HTTP – Listening to port ${ server_url_port }`);
+});

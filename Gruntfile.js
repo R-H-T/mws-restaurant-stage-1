@@ -1,6 +1,6 @@
 const image_sizes = {
   small: 320,
-  medium: 640,
+  medium: 320,
   large: 1024,
   small_x: function(x) { return this.small * x; },
   medium_x: function(x) { return this.medium * x; },
@@ -19,35 +19,35 @@ module.exports = function (grunt) {
             {
               width: image_sizes.small,
               name: 'small',
-              quality: 80
+              quality: 60
             }, {
               width: image_sizes.medium,
               name: 'medium',
-              quality: 70
+              quality: 60
             }, {
               width: image_sizes.large,
               name: 'large',
-              quality: 70
+              quality: 60
             }, {
               width: image_sizes.small_x(2),
               name: 'small',
               suffix: '_x2',
-              quality: 70
+              quality: 40
             }, {
               width: image_sizes.medium_x(2),
               name: 'medium',
               suffix: '_x2',
-              quality: 50
+              quality: 40
             }, {
               width: image_sizes.large_x(2),
               name: 'large',
               suffix: '_x2',
-              quality: 50
+              quality: 40
             }, {
               width: image_sizes.small_x(3),
               name: 'small',
               suffix: '_x3',
-              quality: 50
+              quality: 30
             }, {
               width: image_sizes.medium_x(3),
               name: 'medium',
@@ -105,5 +105,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-mkdir');
-  grunt.registerTask('images', ['clean', 'mkdir', 'responsive_images']);
+  grunt.registerTask('images', ['clean', 'mkdir', 'responsive_images', 'copy']);
 };

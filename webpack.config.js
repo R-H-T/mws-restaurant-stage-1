@@ -95,7 +95,12 @@ module.exports = {
     },
   },
   plugins: [
-    new CopyWebpackPlugin([{from: './src/img', to: 'img'}, {from: './src/js/sw/index.js', to: 'sw.js'}]),
+    new CopyWebpackPlugin([
+      {from: './src/img', to: 'img'},
+      {from: './src/js/sw/index.js', to: 'sw.js'},
+      {from: './src/manifest.json', to: 'manifest.json'},
+      {from: './src/main.manifest', to: 'main.manifest'},
+    ]),
     new HtmlWebPackPlugin({template: './src/index.html', filename: './index.html'}),
     new HtmlWebPackPlugin({template: './src/restaurant.html', filename: './restaurant.html'}),
     new MiniCssExtractPlugin({filename: 'css/[name].css', chunkFilename: '[id].css'}),
