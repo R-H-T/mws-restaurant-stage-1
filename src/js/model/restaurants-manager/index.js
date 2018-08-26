@@ -1,6 +1,7 @@
 import idb from 'idb';
 import dbc, { createUrl } from './config';
 import DataSource, { ascendingSort } from '../datasource/';
+import { urlForReviewsByRestaurantId } from '../../view/restaurant-list-item-view';
 
 const openDatabase = () => {
   if (!navigator.serviceWorker) return Promise.resolve();
@@ -9,13 +10,27 @@ const openDatabase = () => {
     dbc.objectStoreDefaultOptions[key] = {};
   });
   const restaurantsOSKey = dbc.objectStoreKeys.restaurants;
+  const reviewsOSKey = dbc.objectStoreKeys.reviews;
+  const reviewsPendingOSKey = dbc.objectStoreKeys.reviews_pending;
   dbc.objectStoreDefaultOptions[restaurantsOSKey].keyPath = dbc.objectKeys.restaurants.id;
+  dbc.objectStoreDefaultOptions[reviewsOSKey].keyPath = dbc.objectKeys.reviews.id;
+  dbc.objectStoreDefaultOptions[reviewsPendingOSKey].keyPath = dbc.objectKeys.reviews_pending.id;
   return idb.open(dbc.name, dbc.version, db => {
     const keyPath = 'id';
-    const store = db.createObjectStore(restaurantsOSKey, { keyPath });
+    const restaurantsStore = db.createObjectStore(restaurantsOSKey, { keyPath });
+    const reviewsStore = db.createObjectStore(reviewsOSKey, { keyPath });
+    const reviewsPendingStore = db.createObjectStore(reviewsPendingOSKey, { keyPath });
     const restaurantsObjectStoreKeyIndexes = dbc.objectStoreKeysIndexes[restaurantsOSKey];
     for (const { name, keyPath } of restaurantsObjectStoreKeyIndexes) {
-      store.createIndex(name, keyPath);
+      restaurantsStore.createIndex(name, keyPath);
+    }
+    const reviewsObjectStoreKeyIndexes = dbc.objectStoreKeysIndexes[reviewsOSKey];
+    for (const { name, keyPath } of reviewsObjectStoreKeyIndexes) {
+      reviewsStore.createIndex(name, keyPath);
+    }
+    const reviewsPendingObjectStoreKeyIndexes = dbc.objectStoreKeysIndexes[reviewsPendingOSKey];
+    for (const { name, keyPath } of reviewsPendingObjectStoreKeyIndexes) {
+      reviewsPendingStore.createIndex(name, keyPath);
     }
   });
 };
@@ -25,6 +40,34 @@ const getRestaurantsDbIndex = (db, byName = true) => {
   const indexKey = 'by-name';
   const kstx = db.transaction(dbKey).objectStore(dbKey);
   return (byName) ? kstx.index(indexKey) : kstx;
+};
+
+const getReviewsDbIndex = (db, byDate = true) => {
+  const dbKey = dbc.objectStoreKeys.reviews;
+  const indexKey = 'by-date';
+  const kstx = db.transaction(dbKey).objectStore(dbKey);
+  return (byDate) ? kstx.index(indexKey) : kstx;
+};
+
+const getReviewsPendingDbIndex = (db, byDate = true) => {
+  const dbKey = dbc.objectStoreKeys.reviews_pending;
+  const indexKey = 'by-date';
+  const kstx = db.transaction(dbKey).objectStore(dbKey);
+  return (byDate) ? kstx.index(indexKey) : kstx;
+};
+
+const getReviewsRestaurantIdDbIndex = (db) => {
+  const dbKey = dbc.objectStoreKeys.reviews;
+  const indexKey = 'by-restaurant_id';
+  const kstx = db.transaction(dbKey).objectStore(dbKey);
+  return kstx.index(indexKey);
+};
+
+const getReviewsPendingRestaurantIdDbIndex = (db) => {
+  const dbKey = dbc.objectStoreKeys.reviews;
+  const indexKey = 'by-restaurant_id';
+  const kstx = db.transaction(dbKey).objectStore(dbKey);
+  return kstx.index(indexKey);
 };
 
 const extractNeighborhoods = (restaurants = null) => {
@@ -71,7 +114,7 @@ class RestaurantsManager extends DataSource {
 
   set restaurants(newValue) { super.items = newValue; }
   get restaurants() { return super.items; }
-  
+
   updateLists(online = true, neighborhood = null, cuisine = null) {
     if (neighborhood && cuisine) {
       return this.fetchRestaurantsByNeighborhoodAndByCuisine(neighborhood, cuisine, online)
@@ -140,7 +183,7 @@ class RestaurantsManager extends DataSource {
         if (response.status !== 200) return Promise.reject(`Request failed. Returned status of ${ response.status }`);
         return response.json();
       })
-      .then(restaurant => {
+      .then(({ restaurant }) => {
         if (restaurant) {
           RestaurantsManager.cacheRestaurant(restaurant);
         }
@@ -163,19 +206,137 @@ class RestaurantsManager extends DataSource {
     }
   }
 
+  static fetchReviews(id = null, online = true) {
+    if (!id) return Promise.reject('Invalid id.');
+    const getReviews = db => {
+      if (!db) return Promise.reject('Missing db.');
+      const index = getReviewsDbIndex(db, false);
+      return index.get(Number.parseInt(id))
+        .then(reviews => Promise.resolve(reviews));
+    };
+    if (online) {
+      return fetch(urlForReviewsByRestaurantId(id))
+      .then(response => {
+        if (response.status !== 200) return Promise.reject(`Request failed. Returned status of ${ response.status }`);
+        return response.json();
+      })
+      .then(({ reviews }) => {
+        if (reviews) {
+          RestaurantsManager.cacheReviews(reviews);
+        }
+        return Promise.resolve(reviews);
+      })
+      .catch(() => {
+        const dbPromise = openDatabase();
+        return dbPromise.then(getReviews);
+      });
+    } else {
+      const dbPromise = openDatabase();
+      return dbPromise.then(getReviews)
+      .then(reviews => {
+        if (!reviews) {
+          return RestaurantsManager.fetchReviews(id, true)
+        } else {
+          return Promise.resolve(reviews);
+        }
+      });
+    }
+  }
+
   static cacheRestaurant(restaurant) {
+    if(!restaurant) return;
     RestaurantsManager.cacheRestaurants([restaurant]);
   }
-  
-  static cacheRestaurants(restaurants) {
+
+  static cacheRestaurants(restaurants=[]) {
+    if (!restaurants.length) return;
     openDatabase()
     .then(db => {
       if (!db) return;
-      var tx = db.transaction(dbc.objectStoreKeys.restaurants, 'readwrite');
-      var store = tx.objectStore(dbc.objectStoreKeys.restaurants);
-      restaurants.forEach(restaurant => store.put(restaurant));
+      const tx = db.transaction(dbc.objectStoreKeys.restaurants, 'readwrite');
+      const store = tx.objectStore(dbc.objectStoreKeys.restaurants);
+      if (store) {
+        for (const restaurant of restaurants) {
+          store.put(restaurant);
+        }
+      }
+    })
+    .catch(error => {
+      console.debug('Error:', error.message);
     })
   }
+
+  static cacheReview(review) {
+    if (!review) return;
+    RestaurantsManager.cacheReviews([review]);
+  }
+
+  static cacheReviews(reviews=[]) {
+    if(!reviews.length) return;
+    openDatabase()
+    .then(db => {
+      if (!db) return;
+      const tx = db.transaction(dbc.objectStoreKeys.reviews, 'readwrite');
+      const store = tx.objectStore(dbc.objectStoreKeys.reviews);
+      if (store) {
+        for (const review of reviews) {
+          store.put(review);
+        }
+      }
+    })
+    .catch(error => {
+      console.debug('Error:', error.message);
+    })
+  }
+
+  static cacheReviewPending(review) {
+    if (!review) return;
+    RestaurantsManager.cacheReviewsPending([review]);
+  }
+
+  static cacheReviewsPending(reviews=[]) {
+    if(!reviews.length) return;
+    return openDatabase()
+    .then(db => {
+      if (!db) return;
+      const tx = db.transaction(dbc.objectStoreKeys.reviews_pending, 'readwrite');
+      const store = tx.objectStore(dbc.objectStoreKeys.reviews_pending);
+      if (store) {
+        for (const review of reviews) {
+          review.id = Date.now();
+          store.put(review);
+        }
+      }
+    })
+  }
+
+  static fetchReviewsFromCache(id) {
+    return openDatabase()
+    .then(db => {
+      if (!db) return [];
+      const index = (id) ? getReviewsRestaurantIdDbIndex(db) : getReviewsDbIndex(db);
+      return (id) ? index.getAll(id) : index.getAll();
+    });
+  }
+
+  static fetchReviewsPendingFromCache(id) {
+    return openDatabase()
+    .then(db => {
+      if (!db) return [];
+      const index = (id) ? getReviewsPendingRestaurantIdDbIndex(db) : getReviewsPendingDbIndex(db);
+      return (id) ? index.getAll(id) : index.getAll();
+    });
+  }
+
+  // static removeReviewPendingFromCache(createdAt, restaurant_id) {
+  //   // TODO: Create method
+  //   // return openDatabase()
+  //   // .then(db => {
+  //   //   if (!db) return [];
+  //   //   const index = (id) ? getReviewsPendingRestaurantIdDbIndex(db) : getReviewsPendingDbIndex(db);
+  //   //   return (id) ? index.getAll(id) : index.getAll();
+  //   // });
+  // }
 }
 
 export default RestaurantsManager;

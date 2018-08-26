@@ -23,10 +23,14 @@ const dbc = {
   version: DB_VERSION,
   name: APP_ID,
   objectStoreKeys: {
-    restaurants: 'restaurants'
+    restaurants: 'restaurants',
+    reviews: 'reviews',
+    reviews_pending: 'reviews_pending',
   },
   objectStoreKeysSinceVersion: {
-    restaurants: 1
+    restaurants: 1,
+    reviews: 2,
+    reviews_pending: 2,
   },
   objectKeys: {},
   objectStoreKeysIndexes: {},
@@ -34,6 +38,14 @@ const dbc = {
 };
 // Configure each object store's key (optional).
 dbc.objectKeys[dbc.objectStoreKeys.restaurants] = {
+  id: 'id',
+};
+
+dbc.objectKeys[dbc.objectStoreKeys.reviews] = {
+  id: 'id',
+};
+
+dbc.objectKeys[dbc.objectStoreKeys.reviews_pending] = {
   id: 'id',
 };
 // Configure each object store's indexes (optional).
@@ -52,6 +64,30 @@ dbc.objectStoreKeysIndexes[dbc.objectStoreKeys.restaurants] = [
     name: 'by-cuisine',
     keyPath: 'cuisine_type',
     sinceVersion: 1,
+  },
+];
+dbc.objectStoreKeysIndexes[dbc.objectStoreKeys.reviews] = [
+  {
+    name: 'by-restaurant_id',
+    keyPath: 'restaurant_id',
+    sinceVersion: 2,
+  },
+  {
+    name: 'by-date',
+    keyPath: 'createdAt',
+    sinceVersion: 2,
+  },
+];
+dbc.objectStoreKeysIndexes[dbc.objectStoreKeys.reviews_pending] = [
+  {
+    name: 'by-restaurant_id',
+    keyPath: 'restaurant_id',
+    sinceVersion: 2,
+  },
+  {
+    name: 'by-date',
+    keyPath: 'createdAt',
+    sinceVersion: 2,
   },
 ];
 

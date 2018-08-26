@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg class="favorite-btn-symbol" width="24" height="24" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+	<style>
+		.favorite-btn-symbol { cursor: pointer; transition: all 0.2s ease-out; }
+		.favorite-btn-symbol .fb-outer { fill: #53657d; transition: all 0.2s ease-out; }
+		.favorite-btn-symbol .fb-inner { fill: #c9d3df; transition: all 0.2s ease-in; }
+		.favorite-btn-symbol:active .fb-outer { transform-style: preserve-3d;transform: perspective(500px) rotateY(-90deg); }
+		.favorite-btn-symbol:active .fb-inner { transform-style: preserve-3d; transform: perspective(500px) rotateY(-360deg); translate3d(-10%,-10%, 0) scale(1.2); }
+		.favorite-btn-symbol:hover .fb-inner { fill: #d1335b; }
+		.favorite-btn-symbol.active .fb-outer { fill: #d1335b; }
+		.favorite-btn-symbol.active .fb-inner { opacity: 0; }
+		.favorite-btn-symbol.active:active .fb-inner { opacity: 1; }
+		.favorite-btn-symbol.active:hover .fb-inner { fill: #c9d3df; opacity: 1; }
+	</style>
+    <path class="fb-outer" d="M24,8.412c4.716,-6.812 14.147,-6.812 18.863,-2.332c4.716,4.48 4.716,13.44 0,22.4c-3.301,6.72 -11.789,13.44 -18.863,17.92c-7.074,-4.48 -15.562,-11.2 -18.863,-17.92c-4.716,-8.96 -4.716,-17.92 0,-22.4c4.716,-4.48 14.147,-4.48 18.863,2.332Z" />
+    <path class="fb-inner" d="M24,12.527c4.042,-7.887 12.126,-7.887 16.168,-4.047c4.043,3.84 4.043,11.52 0,19.2c-2.829,5.76 -10.105,11.52 -16.168,15.36c-6.063,-3.84 -13.339,-9.6 -16.169,-15.36c-4.042,-7.68 -4.042,-15.36 0,-19.2c4.043,-3.84 12.127,-3.84 16.169,4.047Z" />
+</svg>

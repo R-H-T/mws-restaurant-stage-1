@@ -1,0 +1,29 @@
+// ======================
+//      Breadcrumb
+// ======================
+#breadcrumb
+  ul
+    padding: 10px 40px 16px
+    list-style: none
+    background-color: #eee
+    font-size: 17px
+    margin: 0
+    width: calc(55% - 80px)
+    margin-top: 79px
+    li
+      display: inline // Display list items side by side
+      &+li:before
+        padding: 8px
+        color: black
+        content: "/\00a0" // Add a slash symbol (/) before/behind each list item
+      a
+        color: #056cc5// Add a color to all links inside the list
+        text-decoration: none
+        &[aria-current="page"]
+          color: #555
+          &:hover
+            color: #555
+            text-decoration: none
+        &:hover
+          color: #01447e // Add a color on mouse-over
+          text-decoration: underline

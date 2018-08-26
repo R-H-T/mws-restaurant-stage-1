@@ -8,14 +8,14 @@ import TimeoutTracker from '../../gw/gw-timeout-tracker';
 import CounterView from '../../gw/gw-counter-view';
 import SelectView from '../../view/select-view';
 import RestaurantsManager from '../../model/restaurants-manager';
-import sleep from '../../utils/sleep';
+import MapView from '../../view/map-view/index';
+import '../../../sass/main.sass';
 
 /**
   * Update page and map for current restaurants.
   */
 class IndexController {
   constructor() {
-    this.map;
     this.markers = [];
     this.toastsView = new Toast('');
     this._lostConnectionToast = new Toast('');
@@ -29,10 +29,10 @@ class IndexController {
     this.fillNeighborhoodsHTML = this.fillNeighborhoodsHTML.bind(this);
     this.resetRestaurants = this.resetMarkers.bind(this);
     this.addMarkersToMap = this.addMarkersToMap.bind(this);
-    
+
     // SW
     this.registerServiceWorker();
-    
+
     // TODO: Add clean image cache with appropriate time interval
     // this.cleanImageCache();
     // setInterval(() => {
@@ -41,7 +41,7 @@ class IndexController {
 
     this._toastController = new ToastController();
     document.body.append(this._toastController.el);
-    
+
     const callback = () => {
       requestAnimationFrame(() => {
         this.resetMarkers();
@@ -85,31 +85,16 @@ class IndexController {
   }
 
   setupMap() {
-    /**
-     * Initialize Google map, called from HTML.
-     */
-    window.initMap = googleMaps => {
-      sleep(100)
-      .then(() =>
-        requestAnimationFrame(() => {
-          if (typeof google === 'undefined') {
-            this.updateRestaurants();
-            return;
-          }
-          window.googleMaps = googleMaps;
-          let loc = {
-            lat: 40.722216,
-            lng: -73.987501
-          };
-          this.map = new googleMaps.Map(document.getElementById('map'), {
-            zoom: 12,
-            center: loc,
-            scrollwheel: false
-          });
-          this.updateRestaurants();
-        })
-      );
-    };
+    this.mapView = new MapView({
+      lat: 40.722216,
+      lng: -73.987501,
+      zoom: 12,
+      scrollwheel: false,
+      language: 'en',
+      disableDefaultUI: true });
+    this.mapView.setup().then(() => {
+      requestAnimationFrame(this.updateRestaurants);
+    });
   }
 
   /**
@@ -118,7 +103,7 @@ class IndexController {
   updateRestaurants() {
     const cSelect = document.getElementById('cuisines-select');
     const nSelect = document.getElementById('neighborhoods-select');
-    
+
     const cIndex = cSelect.selectedIndex;
     const nIndex = nSelect.selectedIndex;
 
@@ -126,7 +111,7 @@ class IndexController {
     const neighborhood = nSelect[nIndex].value;
 
     this._restaurantsManager.fetchRestaurantsByNeighborhoodAndByCuisine(cuisine, neighborhood);
-    
+
     const updateViews = () => requestAnimationFrame(() => {
       this.resetMarkers();
       this.addMarkersToMap();
@@ -148,11 +133,7 @@ class IndexController {
    * Reset map markers.
    */
   resetMarkers() {
-    if (typeof google === 'undefined') return;
-    this.markers = this.markers || [];
-    // Remove all map markers
-    this.markers.forEach(marker => { marker.setMap(null); });
-    this.markers = [];
+    if (typeof google !== 'undefined') this.mapView.resetMarkers();
   }
 
   /**
@@ -163,22 +144,22 @@ class IndexController {
       /* global google */
       if (typeof google === 'undefined') return;
       // Add marker to the map
-      const marker = DBHelper.mapMarkerForRestaurant(restaurant, this.map);
+      const marker = DBHelper.mapMarkerForRestaurant(restaurant, this.mapView.map);
       google.maps.event.addListener(marker, 'click', () => {
           self.location.href = marker.url;
       });
-      this.markers.push(marker);
+      this.mapView.add(marker);
     });
   }
 
   registerServiceWorker() {
     const sw = navigator.serviceWorker;
-    
+
     if (!sw) return;
 
     sw.register('/sw.js', { scope: '/' }).then(reg => {
       if (!navigator.serviceWorker.controller) return;
-      
+
       console.log('worker loaded.');
 
       if (reg.waiting) {
@@ -303,7 +284,7 @@ class IndexController {
           const view = new CounterView({ ms: timeoutMs }).secondsView(label);
           return view;
         }();
-        if (!this._lostConnectionToast) {  
+        if (!this._lostConnectionToast) {
           this._lostConnectionToast = new Toast('Unable to connect', null, toastActions);
           this._lostConnectionToast.el.append(countdownView);
           this._toastController.addToast(this._lostConnectionToast);

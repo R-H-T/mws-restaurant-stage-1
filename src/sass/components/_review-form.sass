@@ -1,0 +1,69 @@
+// ======================
+//      Review Form
+// ======================
+.review-form form
+  input
+    padding: 12px
+    border-radius: 3px
+    background: #fff
+    border: 1px solid lightgray
+    width: 90%
+    margin-bottom: 8px
+  input[type='range']
+    padding: 10px 0 10px 0px
+    width: 158px
+    min-width: 158px
+    max-width: 158px
+  textarea
+    height: 80px
+    padding: 12px
+    border-radius: 3px
+    background: #fff
+    border: 1px solid lightgray
+    width: 90%
+    resize: none
+  button
+    cursor: pointer
+    height: 48px
+    border-radius: 3px
+    background: darkgreen
+    color: white
+    border: 1px solid lightgray
+    width: 150px
+    float: right
+    margin-right: 10%
+    font-weight: bolder
+    font-size: 16px
+    &:hover
+      background: green
+
+  .review-form-star-rating
+    position: relative
+  .review-form-star-rating::after
+    content: ''
+    user-select: none
+    position: absolute
+    right: 0
+    margin-right: -10px
+    padding-left: 6px
+    padding-right: 6px
+    bottom: 0
+    width: 100%
+    border-radius: 3px
+    background: #fff
+    font-size: 23px
+    text-align: left
+    vertical-align: middle
+    color: #a9a9a9
+    z-index: 2
+    will-change: content
+  .review-form-star-rating[data-rating="1"]::after
+    content: '⭐️--•--•--•--•'
+  .review-form-star-rating[data-rating="2"]::after
+    content: '⭐️ ⭐️--•--•--•'
+  .review-form-star-rating[data-rating="3"]::after
+    content: '⭐️ ⭐️ ⭐️--•--•'
+  .review-form-star-rating[data-rating="4"]::after
+    content: '⭐️ ⭐️ ⭐️ ⭐️--•'
+  .review-form-star-rating[data-rating="5"]::after
+    content: '⭐️ ⭐️ ⭐️ ⭐️ ⭐️'

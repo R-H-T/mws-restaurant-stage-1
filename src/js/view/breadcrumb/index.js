@@ -1,3 +1,4 @@
+import '../../../sass/components/_breadcrumb.sass';
 /**
  * The Breadcrumb View
  * 

@@ -1,17 +1,36 @@
 import ResponsiveImage from '../../gw/gw-responsive-image';
 import FileInfo from '../../gw/gw-fileinfo';
+import FavoriteButton from '../favorite-button';
 
 class RestaurantListItemView {
     constructor(restaurant) {
         const el = document.createElement('li');
         const imgSrc = imageUrlForRestaurant(restaurant);
-        const { name, neighborhood, address } = restaurant;
+        const { name, neighborhood, address, is_favorite = "false" } = restaurant;
         const responsiveImage = new ResponsiveImage(imgSrc, name);
         responsiveImage.className = 'restaurant-img';
         el.append(responsiveImage.el);
 
+        const fb = new FavoriteButton(null, `Make ${ name } favorite`, (newState) => { /*window.console.debug(`is: ${ newState }`);*/ });
+        const favoriteButtonEl = fb.el;
+        fb.isOn = (is_favorite + '' == 'true' || is_favorite == true) ? true : false;
+        fb.render();
+        el.append(favoriteButtonEl);
+        const favoriteToggleHandler = e => {
+            e.preventDefault();
+            const url = urlForFavoriteToggleRestaurant(restaurant);
+            fetch(url, {
+                method: 'PUT',
+            }).then(() => {
+                fb.render();
+            }).catch(console.debug);
+
+        };
+        fb.el.addEventListener('click', favoriteToggleHandler);
+
         const nameEl = document.createElement('h3');
         nameEl.innerHTML = name;
+        nameEl.title = name
         el.append(nameEl);
 
         const neighborhoodEl = document.createElement('p');
@@ -35,6 +54,18 @@ class RestaurantListItemView {
 
 export const urlForRestaurant = restaurant => {
     return (`./restaurant.html?id=${ restaurant.id }`);
+};
+
+export const urlForFavoriteToggleRestaurant = restaurant => {
+    return (`http://localhost:1337/restaurants/${ restaurant.id }/?is_favorite=${(!(restaurant.is_favorite == 'true') ? 'true' : 'false')}`);
+};
+
+export const urlForReviewsByRestaurantId = (restaurantId = -1) => {
+    return (`http://localhost:1337/reviews/?restaurant_id=${ restaurantId }`);
+};
+
+export const urlForPostingRestaurantReview = review => {
+    return (`http://localhost:1337/reviews/`);
 };
 
 export const imageUrlForRestaurant = restaurant => {

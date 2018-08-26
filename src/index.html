@@ -21,6 +21,69 @@
   <link rel="apple-touch-startup-image" href="/img/launch.png">
   <link rel="shortcut icon" href="/favicon.ico">
   <link src="https://normalize-css.googlecode.com/svn/trunk/normalize.css" rel="stylesheet">
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    article,
+    aside,
+    canvas,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    section {
+      display: block;
+    }
+
+    body, td, th, p {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    body {
+      background-color: #eee;
+      margin: 0;
+      position: relative;
+      padding-top: 80px; /* Space equal to navigation bar height */
+    }
+
+    ul, li {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #333;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0 0 20px;
+    }
+
+    #maincontent {
+      background-color: #f3f3f3;
+      min-height: 100%;
+    }
+    a {
+      color: orange;
+      text-decoration: none;
+    }
+    a:hover,
+    a:focus {
+        color: #3397db;
+        text-decoration: none;
+    }
+    img {
+      border: none 0px #fff;
+    }
+  </style>
 </head>
 
 <body>
@@ -31,7 +94,7 @@
   </header>
 
   <main id="maincontent">
-    <section id="map-container">
+    <section id="map-container" aria-hidden="true">
       <div id="map" role="application"></div>
     </section>
     <section id="list-container">
