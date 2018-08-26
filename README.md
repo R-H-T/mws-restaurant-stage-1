@@ -1,12 +1,15 @@
-# MWS – Project: Restaurant Reviews - Stage 2
+# MWS – Project: Restaurant Reviews - Stage 3
 
 ---
 
 ## Project Details
-The Restaurant Reviews Stage 2 project is part of a 3-stages project included in the curriculum of the Mobile Web Specialist Nanodegree Program created by Google & Udacity.
+The Restaurant Reviews Stage 3 project is part of a 3-stages project included in the curriculum of the Mobile Web Specialist Nanodegree Program created by Google & Udacity.
 
 **Restaurant Reviews Stage 1-2** – These stages demonstrates my abilities to turn a Non-Mobile Ready, Non-Accessible, and Non-PWA project into a fully Accessible, and functioning Progressive Web App with a genuine first class Offline First user experience. Utilizing the powerful Service Worker feature which will replace the old App Cache. Thus, demonstrating the initial skillsets I obtained from my training during the first period of the program along with my previously acquired skills.
 Stage 2 introduces some major optimizations to the web app which can be measured with Google's Lighthouse utilities. I've also added lazy loading for all images in this stage.
+
+**Stage 3** – This is the final stage, which demonstrates how to make a performant PWA. This has involved Background Sync
+and many other additional features. Including Browser Optimization techniques, and etc.
 
 ---
 
@@ -17,6 +20,11 @@ Restaurant Reviews is perhaps already pretty much self-explanatory. Its main fun
 
 ## Getting started
 
+### You'll need to start the backend server at localhost:1337
+https://github.com/udacity/mws-restaurant-stage-3
+Copy the database file in this – R-H-T/mws-restaurant-stage-1 project's directory `ext-servers/localDiskDb_2.db`
+and replace it with the /mws-restaurant-stage-3/ project's `.tmp/localDiskDb.db` (Note: rename `localDiskDb_2.db`
+to `localDiskDb.db`).
 
 ### Prerequisites
 * Node.js - Node Package Manager (npm).
