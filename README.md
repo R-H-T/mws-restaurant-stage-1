@@ -51,7 +51,7 @@ After running the two first steps of **Begin Development**:
 * `npm run audit` – Builds and starts the project in Production mode with a test server (Node & Express, Webpack Dev Server Middleware). This command is intended for Lighthouse testing in Chrome.
 * `npm run dev` – Builds the project in plain Development Mode. The files will be generated inside the dist folder and most of the files will be un-minified for debugging purposes (_Not recommended for production - see `npm run build` instead_).
 * `npm run watch` – Starts a Watch task in Development Mode.
-* `npm run images` – Generates responsive images from `src/img_source/` to `src/img/`. Any image you wish not to be processed should go into the `src/img_source/fixed/`-directory.
+* `npm run images` – Generates responsive images from `src/img_source/` to `src/img/`. Any image you wish not to be processed should go into the `src/img_source/fixed/`-directory. (Note: This section usese Grunt).
 * `npm run build` – Builds the project in Production Mode. The files will be generated inside the dist folder in a minified format, ideal for production use.
 * `npm run test` – Runs all the tests available in the project.
 * `npm run test:watch` – Runs tests in watch mode.
