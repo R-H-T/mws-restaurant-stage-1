@@ -1,5 +1,7 @@
 # MWS – Project: Restaurant Reviews - Stage 3
 
+![][image-1]
+
 ---
 
 ## Project Details
@@ -63,3 +65,5 @@ After running the two first steps of **Begin Development**:
 Code added after forking the base project - Copyright ©2018 – Roberth Hansson-Tornéus - [R-H-T](https://github.com/R-H-T) (Gawee.Narak@gmail.com)
 
 See the code owners file for a full list of accredited code owners. Or go to [the base project](https://github.com/udacity/mws-restaurant-stage-1).
+
+[image-1]: r-h-t_mws_restaurant_reviews_fhd.png
